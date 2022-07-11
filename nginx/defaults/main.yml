@@ -1,2 +1,7 @@
 ---
-# defaults file for nginx
+# remove nginx default site
+nginx_remove_default: true
+#path to nginx site-template
+#переменная role_path встроенная и по дефолту она будет брать значение 
+#текущей директории где лежит роль
+nginx_template_path: "{{ role_path }}/templates"
