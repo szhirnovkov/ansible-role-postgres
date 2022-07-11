@@ -1,5 +1,6 @@
 ---
 # remove nginx default site
+#Эту переменную можно переопределить в групповых переменных
 nginx_remove_default: true
 #path to nginx site-template
 #переменная role_path встроенная и по дефолту она будет брать значение 
