@@ -2,6 +2,6 @@
 - name: Converge
   hosts: db
   tasks:
-    - name: "Include acme.postgres"
+    - name: Include postgres
       include_role:
-        name: "acme.postgres"
+        name: postgres
