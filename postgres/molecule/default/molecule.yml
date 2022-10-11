@@ -1,0 +1,16 @@
+---
+ dependency:
+   name: galaxy
+ driver: 
+   name: docker
+ platforms:
+  - name: ubuntu2004
+    image: ubuntu:20.04
+ provisioner:
+  name: ansible
+ verifier:
+  name: ansible
+ lint: |
+  set -euxo pipefail
+  yamllint .
+  ansible-lint .
