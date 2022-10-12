@@ -56,7 +56,7 @@
     contype: host
     create: true
     databases: all
-    dest: /etc/postgresql/"{{ version" }}"/main/pg_hba.conf
+    dest: "{{ path_to_hba }}"
     method: md5
     source: "{{ ip }}"
     users: "{{ db_user }}"

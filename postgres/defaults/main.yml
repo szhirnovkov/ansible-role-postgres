@@ -3,3 +3,4 @@ db_name: devops
 db_password: devops
 ip: 192.168.56.1
 version: 12
+path_to_hba: /etc/postgresql/12/main/pg_hba.conf
