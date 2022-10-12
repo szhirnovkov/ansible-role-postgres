@@ -1,13 +1,13 @@
 ---
- - name: Update all packages to their latest version
-   apt:
-      update_cache: true
-      name: "*"
-      state: latest
-   become: true
+#- name: Update all packages to their latest version
+#  ansible.builtin.apt:
+#     update_cache: true
+#     name: "*"
+#     state: latest
+#  become: true
 
  - name: Install Postgresql on deb-based
-   apt:
+   ansible.builtin.apt:
     name:
       - postgresql
       - postgresql-contrib
@@ -19,10 +19,10 @@
     update_cache: true
     cache_valid_time: 86400
    become: true
-   notify: postgres_restart
+   notify: Postgres_restart
 
  - name: Install Python module for vagrant
-   pip:
+   ansible.builtin.pip:
     name:
      - psycopg2
      - psycopg2-binary
