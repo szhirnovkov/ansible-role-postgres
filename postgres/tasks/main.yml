@@ -1,14 +1,8 @@
----
-#- name: Update all packages to their latest version
-#  ansible.builtin.apt:
-#     update_cache: true
-#     name: "*"
-#     state: latest
-#  become: true
-
- - name: Install Postgresql on deb-based
-   ansible.builtin.apt:
-    name:
+--- 
+- 
+  ansible.builtin.apt: 
+    cache_valid_time: 86400
+    name: 
       - postgresql
       - postgresql-contrib
       - python3-pip
@@ -17,52 +11,52 @@
       - python-setuptools
     state: present
     update_cache: true
-    cache_valid_time: 86400
-   become: true
-   notify: Postgres_restart
-
- - name: Install Python module for vagrant
-   ansible.builtin.pip:
-    name:
-     - psycopg2
-     - psycopg2-binary
+  become: true
+  name: "Install Postgresql on deb-based"
+  notify: Postgres_restart
+- 
+  ansible.builtin.pip: 
+    name: 
+      - psycopg2
+      - psycopg2-binary
     state: present
-   become: true
-
- - name: Create app database
-   postgresql_db:
-    state: present
+  become: true
+  name: "Install Python module for vagrant"
+- 
+  become: true
+  become_user: postgres
+  name: "Create app database"
+  postgresql_db: 
     name: "{{ db_name }}"
-   become: true
-   become_user: postgres
-
- - name: "Create db user"
-   postgresql_user:
     state: present
+- 
+  become: true
+  become_user: postgres
+  name: "Create db user"
+  postgresql_user: 
     name: "{{ db_user }}"
     password: "{{ db_password }}"
-   become: true
-   become_user: postgres
-
- - name: "Grant db user access to app db"
-   postgresql_privs:
-    type: database
+    state: present
+- 
+  become: true
+  become_user: postgres
+  name: "Grant db user access to app db"
+  postgresql_privs: 
     database: "{{ db_name }}"
-    roles: "{{ db_user }}"
-    grant_option: no
+    grant_option: false
     privs: all
-   become: true
-   become_user: postgres
-
- - name: "Allow md5 connection for the db user"
-   postgresql_pg_hba:
-    dest: "/etc/postgresql/12/main/pg_hba.conf"
+    roles: "{{ db_user }}"
+    type: database
+- 
+  become: true
+  become_user: postgres
+  name: "Allow md5 connection for the db user"
+  notify: postgres_restart
+  postgresql_pg_hba: 
     contype: host
+    create: true
     databases: all
-    source: 192.168.56.1
+    dest: /etc/postgresql/12/main/pg_hba.conf
     method: md5
+    source: "192.168.56.1"
     users: "{{ db_user }}"
-    create: yes
-   become: true
-   become_user: postgres
-   notify: postgres_restart
