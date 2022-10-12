@@ -1,0 +1,5 @@
+db_user: devops
+db_name: devops
+db_password: devops
+ip: 192.168.56.1
+version: 12
