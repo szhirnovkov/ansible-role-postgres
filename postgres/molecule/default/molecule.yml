@@ -11,7 +11,7 @@ provisioner:
   name: ansible
 verifier: 
   name: ansible
-lint: |-
+lint: |
   set -euxo pipefail
   yamllint .
   ansible-lint .
