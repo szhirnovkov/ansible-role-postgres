@@ -1,7 +1,7 @@
 ---
  dependency:
    name: galaxy
- driver: 
+ driver:
    name: docker
  platforms:
   - name: ubuntu2004

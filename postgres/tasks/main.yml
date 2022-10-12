@@ -20,10 +20,10 @@
     cache_valid_time: 86400
    become: true
    notify: postgres_restart
-  
+
  - name: Install Python module for vagrant
    pip:
-    name: 
+    name:
      - psycopg2
      - psycopg2-binary
     state: present
