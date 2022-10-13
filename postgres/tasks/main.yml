@@ -68,9 +68,10 @@
   become: true
 
 -
-  name: "Rsync current directory of data postgresql"
-  ansible.builtin.shell: rsync -av "{{ postgresql_sourcepath_to_data }}" "{{ postgresql_destpath_to_data }}"
-  become: true
+  name: Synchronization using rsync protocol (push)
+  ansible.posix.synchronize:
+    src: "{{ postgresql_sourcepath_to_data }}"
+    dest: rsync://"{{ postgresql_destpath_to_data }}"
 
 - name: "Change postgresql data"
   ansible.builtin.lineinfile:
