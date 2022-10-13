@@ -20,7 +20,6 @@
   become: true
   become_user: postgres
   name: "Allow md5 connection for the db user"
-  notify: Restart_postgres
   postgresql_pg_hba:
     contype: host
     create: true
@@ -38,6 +37,12 @@
     state: present
   become: true
   become_user: postgres
+-
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted
+  name: Restart_postgres
+  become: true
 -
   become: true
   become_user: postgres
