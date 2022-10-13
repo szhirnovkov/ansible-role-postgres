@@ -15,15 +15,6 @@
     update_cache: true
   become: true
   name: "Install Postgresql on deb-based"
-  notify: Restart_postgres
--
-  name: "Change postgresql data"
-  ansible.builtin.lineinfile:
-    path: "{{ postgresql_path_to_config }}"
-    regexp: '^data_directory'
-    line: data_directory = '/mnt/postgresql/12/main'
-  become: true
-  notify: Restart_postgres
 -
   become: true
   become_user: postgres
@@ -53,6 +44,7 @@
   become: true
   become_user: postgres
   name: "Allow md5 connection for the db user"
+  notify: Restart_postgres
   postgresql_pg_hba:
     contype: host
     create: true
@@ -61,10 +53,3 @@
     method: md5
     source: "{{ postgresql_ip }}"
     users: "{{ postgresql_db_user }}"
-
-#-
- # name: "Start service postgresql"
-  #ansible.builtin.service:
-  #  name: postgresql
-   # state: started
-  #become: true
