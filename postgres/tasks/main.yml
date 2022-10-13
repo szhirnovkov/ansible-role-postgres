@@ -15,6 +15,13 @@
     update_cache: true
   become: true
   name: "Install Postgresql on deb-based"
+-
+  name: "Change postgresql data"
+  ansible.builtin.lineinfile:
+    path: "{{ postgresql_path_to_config }}"
+    regexp: '^data_directory'
+    line: data_directory = '/mnt/postgresql/12/main'
+  become: true
   notify: Restart_postgres
 -
   become: true
@@ -54,29 +61,9 @@
     source: "{{ postgresql_ip }}"
     users: "{{ postgresql_db_user }}"
 
--
-  name: "Stop service postgresql for change data directory of postgresql"
-  ansible.builtin.service:
-    name: postgresql
-    state: stopped
-  become: true
-
--
-  name: Synchronization using rsync protocol (push)
-  ansible.posix.synchronize:
-    src: "{{ postgresql_sourcepath_to_data }}"
-    dest: rsync://"{{ postgresql_destpath_to_data }}"
-
-- name: "Change postgresql data"
-  ansible.builtin.lineinfile:
-    path: "{{ postgresql_path_to_config }}"
-    regexp: '^data_directory='
-    line: data_directory = '/mnt/volume-nyc1-01/postgresql/12/main'
-  become: true
-
--
-  name: "Start service postgresql"
-  ansible.builtin.service:
-    name: postgresql
-    state: started
-  become: true
+#-
+ # name: "Start service postgresql"
+  #ansible.builtin.service:
+  #  name: postgresql
+   # state: started
+  #become: true

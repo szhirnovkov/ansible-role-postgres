@@ -4,5 +4,5 @@ postgresql_db_password: devops
 postgresql_ip: 192.168.56.1
 postgresql_path_to_hba: /etc/postgresql/12/main/pg_hba.conf
 postgresql_path_to_config: /etc/postgresql/12/main/postgresql.conf
-postgresql_sourcepath_to_data: /var/lib/postgresql
-postgresql_destpath_to_data: /mnt/volume-nyc1-01
+#postgresql_sourcepath_to_data: /var/lib/postgresql
+#postgresql_destpath_to_data: /mnt/volume-nyc1-01
