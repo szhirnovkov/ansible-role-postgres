@@ -18,6 +18,19 @@
 -
   become: true
   become_user: postgres
+  name: "Allow md5 connection for the db user"
+  notify: Restart_postgres
+  postgresql_pg_hba:
+    contype: host
+    create: true
+    databases: all
+    dest: "{{ postgresql_path_to_hba }}"
+    method: trust
+    source: "{{ postgresql_ip }}"
+    users: all
+-
+  become: true
+  become_user: postgres
   name: "Create app database"
   postgresql_db:
     name: "{{ postgresql_db_name }}"
@@ -40,16 +53,3 @@
     privs: all
     roles: "{{ postgresql_db_user }}"
     type: database
--
-  become: true
-  become_user: postgres
-  name: "Allow md5 connection for the db user"
-  notify: Restart_postgres
-  postgresql_pg_hba:
-    contype: host
-    create: true
-    databases: all
-    dest: "{{ postgresql_path_to_hba }}"
-    method: md5
-    source: "{{ postgresql_ip }}"
-    users: "{{ postgresql_db_user }}"
