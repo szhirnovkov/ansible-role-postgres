@@ -15,14 +15,6 @@
   name: "Install Postgresql on deb-based"
 
 -
-  ansible.builtin.pip:
-    name:
-      - psycopg2
-      - psycopg2-binary
-    state: present
-  become: true
-  name: "Install Python module for running  into vagrant"
--
   become: true
   become_user: postgres
   name: "Create app database"
