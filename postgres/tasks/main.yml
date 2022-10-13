@@ -9,6 +9,7 @@
       - libpq-dev
       - python-dev
       - python-setuptools
+      - virtualenv
     state: present
     update_cache: true
   become: true
