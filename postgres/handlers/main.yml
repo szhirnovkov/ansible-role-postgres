@@ -3,4 +3,5 @@
   ansible.builtin.service:
     name: postgresql
     state: restarted
-  name: Postgres_restart
+  name: Restart_postgres
+  become: true

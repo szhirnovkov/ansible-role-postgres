@@ -15,7 +15,7 @@
     update_cache: true
   become: true
   name: "Install Postgresql on deb-based"
-  notify: Postgres_restart
+  notify: Restart_postgres
 -
   become: true
   become_user: postgres
