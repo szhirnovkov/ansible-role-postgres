@@ -30,10 +30,11 @@
     users: all
 -
   name: "Configure PostgreSQL. Set listen_addresses"
-  lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+  lineinfile:
+    dest: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
     regexp: "listen_addresses ="
     line: "listen_addresses = '*'"
-    state=present
+    state: present
   become: true
   become_user: postgres
 -
