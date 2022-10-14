@@ -8,7 +8,7 @@
   become: true
   name: "Install Postgresql on deb-based"
 -
-  include_tasks: configure.yml
+  ansible.builtin.include_tasks: configure.yml
 -
   become: true
   become_user: postgres
