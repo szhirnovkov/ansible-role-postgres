@@ -1,0 +1,14 @@
+---
+dependencies: []
+galaxy_info:
+  author: szhirnovkov
+  company: FinGen
+  description: "your role description"
+  galaxy_tags: []
+  license: "FinGen Ltd"
+  min_ansible_version: 2.1
+  namespace: acme
+  platforms:
+    -
+      name: Ubuntu
+  role_name: postgres
