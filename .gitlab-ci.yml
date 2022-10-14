@@ -6,7 +6,6 @@ variables:
  DOCKER_TLS_CERTDIR: ""
 molecule:
   stage: test
-  image: docker:stable-dind
   services:
     - docker:dind
   before_script:
