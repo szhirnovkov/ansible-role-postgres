@@ -9,7 +9,6 @@
   name: "Configure PostgreSQL. Set listen_addresses"
   notify: Restart_postgresql
 -
-  become: true
   name: "Allow md5 connection for the db user"
   notify: Restart_postgresql
   postgresql_pg_hba:
