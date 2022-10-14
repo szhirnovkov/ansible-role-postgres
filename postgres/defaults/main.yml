@@ -2,8 +2,15 @@ postgresql_db_user: devops
 postgresql_db_name: devops
 postgresql_db_password: devops
 postgresql_ip: 0.0.0.0/0
-postgresql_version: 12
-postgresql_path_to_hba: /etc/postgresql/12/main/pg_hba.conf
-postgresql_path_to_config: /etc/postgresql/12/main/postgresql.conf
+postgresql_packages:
+      - postgresql-contrib
+      - python3-pip
+      - libpq-dev
+      - python-dev
+      - python-setuptools
+      - python3-venv
+      - virtualenv
+      - python3-psycopg2
+postgresql_config_path: /etc/postgresql/12/main
 #postgresql_sourcepath_to_data: /var/lib/postgresql
 #postgresql_destpath_to_data: /mnt/volume-nyc1-01

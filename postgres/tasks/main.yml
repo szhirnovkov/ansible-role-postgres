@@ -2,47 +2,13 @@
 -
   ansible.builtin.apt:
     cache_valid_time: 86400
-    name:
-      - postgresql
-      - postgresql-contrib
-      - python3-pip
-      - libpq-dev
-      - python-dev
-      - python-setuptools
-      - python3-venv
-      - virtualenv
-      - python3-psycopg2
+    name: "{{ postgresql_packages }}"
     state: present
     update_cache: true
   become: true
   name: "Install Postgresql on deb-based"
 -
-  become: true
-  become_user: postgres
-  name: "Allow md5 connection for the db user"
-  postgresql_pg_hba:
-    contype: host
-    create: true
-    databases: all
-    dest: "{{ postgresql_path_to_hba }}"
-    method: trust
-    source: "{{ postgresql_ip }}"
-    users: all
--
-  name: "Configure PostgreSQL. Set listen_addresses"
-  ansible.builtin.lineinfile:
-    dest: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
-    regexp: "listen_addresses ="
-    line: "listen_addresses = '*'"
-    state: present
-  become: true
-  become_user: postgres
--
-  ansible.builtin.service:
-    name: postgresql
-    state: restarted
-  name: "Restart_postgres"
-  become: true
+  include_tasks: configure.yml
 -
   become: true
   become_user: postgres
