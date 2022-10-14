@@ -1,9 +1,10 @@
---- 
-- 
-  hosts: db
+---
+-
+  become: true
+  hosts: all
   name: Converge
-  tasks: 
-    - 
-      include_role: 
-        name: postgres
-      name: "Include postgres"
+  tasks:
+    -
+      include_role:
+        name: ansible_role_postgres
+      name: "Include postgres_role"

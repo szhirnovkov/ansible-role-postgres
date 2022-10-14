@@ -11,4 +11,4 @@ galaxy_info:
   platforms:
     -
       name: Ubuntu
-  role_name: postgres
+  role_name: ansible_role_postgres
