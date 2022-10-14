@@ -15,7 +15,7 @@
     contype: host
     create: true
     databases: all
-    dest: "{{ postgresql_path_to_hba }}"
+    dest: {{ postgresql_path_to_hba }}
     method: trust
-    source: "{{ postgresql_ip }}"
+    source: 0.0.0.0/0
     users: all
