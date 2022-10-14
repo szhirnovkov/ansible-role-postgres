@@ -19,9 +19,3 @@
     method: trust
     source: "{{ postgresql_ip }}"
     users: all
--
-  ansible.builtin.service:
-    name: postgresql
-    state: restarted
-  become: true
-  name: Restart_postgresql
