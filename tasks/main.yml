@@ -10,7 +10,8 @@
 -
   ansible.builtin.service:
     name: postgresql
-    state: started
+    state: restarted
+    enabled: true
   become: true
   name: Start_postgresql
 -
