@@ -1,16 +1,15 @@
-postgresql_db_user: devops
+---
+postgresql_config_path: /etc/postgresql/12/main
 postgresql_db_name: devops
 postgresql_db_password: devops
+postgresql_db_user: devops
 postgresql_ip: 0.0.0.0/0
 postgresql_packages:
-      - postgresql-contrib
-      - python3-pip
-      - libpq-dev
-      - python-dev
-      - python-setuptools
-      - python3-venv
-      - virtualenv
-      - python3-psycopg2
-postgresql_config_path: /etc/postgresql/12/main
-#postgresql_sourcepath_to_data: /var/lib/postgresql
-#postgresql_destpath_to_data: /mnt/volume-nyc1-01
+  - postgresql-contrib
+  - python3-pip
+  - libpq-dev
+  - python-dev
+  - python-setuptools
+  - python3-venv
+  - virtualenv
+  - python3-psycopg2

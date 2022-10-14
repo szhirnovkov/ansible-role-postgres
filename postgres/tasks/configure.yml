@@ -5,7 +5,6 @@
     line: "listen_addresses = '*'"
     regexp: "^#listen_addresses ="
     state: present
-    mode: 0644
   become: true
   name: "Configure PostgreSQL. Set listen_addresses"
   notify: Restart_postgresql
