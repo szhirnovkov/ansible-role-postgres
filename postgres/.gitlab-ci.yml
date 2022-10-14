@@ -18,4 +18,4 @@ molecule:
   script:
     - molecule test
   tags:
-    - docker
+    - docker-runner
