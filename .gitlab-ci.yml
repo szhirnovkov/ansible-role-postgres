@@ -6,7 +6,7 @@ variables:
  DOCKER_TLS_CERTDIR: ""
 molecule:
   stage: test
-  image: docker:stable-dind
+  image: docker:stable-dind  #molecule-ci:latest-debian
   services:
     - docker:dind
   before_script:

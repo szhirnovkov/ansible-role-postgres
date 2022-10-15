@@ -5,11 +5,13 @@ postgresql_db_password: devops
 postgresql_db_user: devops
 postgresql_ip: 0.0.0.0/0
 postgresql_packages:
-  - postgresql-contrib
-  - python3-pip
-  - libpq-dev
-  - python-dev
-  - python-setuptools
-  - python3-venv
-  - virtualenv
-  - python3-psycopg2
+    - libpq-dev
+    - python3-psycopg2
+    - postgresql
+    - postgresql-contrib
+  #- python3-pip
+  #- libpq-dev
+ # - python-dev
+  #- python-setuptools
+  #- python3-venv
+  #- virtualenv
