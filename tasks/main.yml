@@ -7,9 +7,30 @@
     update_cache: true
   become: true
   name: "Install Postgresql on deb-based"
--
-  ansible.builtin.include_tasks: configure.yml
-  name: "include configure tasks"
+
+- name: "Configure PostgreSQL. Set listen_addresses"
+  ansible.builtin.lineinfile:
+    dest: "{{ postgresql_config_path }}/postgresql.conf"
+    regexp: "^#listen_addresses ="
+    line: "listen_addresses = '*'"
+    state: present
+  become: true
+  notify:
+    - "Restart_postgresql"
+
+- name: "Allow md5 connection for the db user"
+  postgresql_pg_hba:
+    contype: host
+    create: true
+    databases: all
+    dest: "{{ postgresql_config_path }}/pg_hba.conf"
+    method: trust
+    source: "{{ postgresql_ip }}"
+    users: all
+  become: true
+  notify:
+    - "Restart_postgresql"
+
 -
   become: true
   become_user: postgres
