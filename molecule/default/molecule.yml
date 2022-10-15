@@ -2,7 +2,6 @@
 driver:
   name: docker
 lint: |-
-    set -euxo pipefail
     yamllint .
     ansible-lint .
 platforms:
