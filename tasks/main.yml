@@ -8,13 +8,6 @@
   become: true
   name: "Install Postgresql on deb-based"
 -
-  ansible.builtin.service:
-    name: postgresql
-    state: restarted
-    enabled: true
-  become: true
-  name: Start_postgresql
--
   ansible.builtin.include_tasks: configure.yml
   name: "include configure tasks"
 -
