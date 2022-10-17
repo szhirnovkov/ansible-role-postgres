@@ -1,5 +1,8 @@
 ---
 postgresql_config_path: /etc/postgresql/12/main
+postgresql_path_data_direcroty: /var/lib/postgresql
+postgresql_destination_data: /pgdata
+postgresql_new_path_data_directory: /pgdata/postgresql/12/main
 postgresql_db_name: devops
 postgresql_db_password: devops
 postgresql_db_user: devops
@@ -9,9 +12,3 @@ postgresql_packages:
     - python3-psycopg2
     - postgresql
     - postgresql-contrib
-  #- python3-pip
-  #- libpq-dev
- # - python-dev
-  #- python-setuptools
-  #- python3-venv
-  #- virtualenv

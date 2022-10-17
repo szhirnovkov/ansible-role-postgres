@@ -10,11 +10,31 @@
   become: true
   name: "Install Postgresql on deb-based"
 
+- name: Stop postgresql
+  ansible.builtin.service:
+    name: postgresql
+    state: stopped
+  become: true
+
+- name: Synchronization of two paths both on the control machine
+  ansible.posix.synchronize:
+    src: "{{ postgresql_path_data_direcroty }}"
+    dest: "{{ postgresql_destination_data }}"
+  delegate_to: "{{ inventory_hostname }}"
+
 - name: "Configure PostgreSQL. Set listen_addresses"
   ansible.builtin.lineinfile:
     dest: "{{ postgresql_config_path }}/postgresql.conf"
     regexp: "^#listen_addresses ="
     line: "listen_addresses = '*'"
+    state: present
+  become: true
+
+- name: "Configure PostgreSQL. Change default data_directory"
+  ansible.builtin.lineinfile:
+    dest: "{{ postgresql_config_path }}/postgresql.conf"
+    regexp: "^data_directory = "
+    line: data_directory = '{{ postgresql_new_path_data_directory }}'
     state: present
   become: true
 
@@ -28,12 +48,12 @@
     source: "{{ postgresql_ip }}"
     users: all
   become: true
-  notify:
-    - Restart postgresql
 
-- name: Flush handlers
-  meta: flush_handlers
-
+- name: Start postgresql
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+  become: true
 -
   become: true
   become_user: postgres
