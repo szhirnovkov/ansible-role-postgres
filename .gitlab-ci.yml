@@ -6,9 +6,9 @@ variables:
  DOCKER_TLS_CERTDIR: ""
 molecule:
   stage: test
-  image: docker:18.09-dind  #molecule-ci:latest-debian
+  image: docker:18-git  #molecule-ci:latest-debian
   services:
-    - docker:dind
+    - docker:18-dind
   before_script:
     - apk add --no-cache
       python3 python3-dev py3-pip gcc git curl build-base
