@@ -87,24 +87,22 @@
   become: true
   when: ansible_host == "{{ postgresql_master_ip }}"
 -
-  name: "Create app database"
+  name: "Create database"
   postgresql_db:
     name: "{{ postgresql_db_name }}"
     state: present
   when: ansible_host == "{{ postgresql_master_ip }}"
-  become: true
-  become_user: postgres
+  become_user: "{{ postgresql_default_user }}"
 -
   name: "Create db user"
   postgresql_user:
-    name: "{{ postgresql_db_user }}"
-    password: "{{ postgresql_db_password }}"
+    name: "{{ item.postgresql_db_user }}"
+    password: "{{ item.postgresql_db_password }}"
     state: present
+  loop: "{{ postgresql_users }}"
+  become_user: "{{ postgresql_default_user }}"
   when: ansible_host == "{{ postgresql_master_ip }}"
-  become: true
-  become_user: postgres
 -
-
   name: "Grant db user access to app db"
   postgresql_privs:
     database: "{{ postgresql_db_name }}"
@@ -114,9 +112,9 @@
     type: database
   when: ansible_host == "{{ postgresql_master_ip }}"
   become: true
-  become_user: postgres
-
-- name: Recursively remove data directory
+  become_user: "{{ postgresql_default_user }}"
+-
+  name: Recursively remove data directory
   ansible.builtin.file:
     path: "{{postgresql_new_path_data_directory }}"
     state: absent
@@ -129,11 +127,16 @@
     state: directory
     mode: '0700'
   become: true
-  become_user: postgres
+  become_user: "{{ postgresql_default_user }}"
   when: ansible_host == "{{ postgresql_slave_ip }}"
 
-- name: Dump an existing database using the directory format
-  community.postgresql.postgresql_db:
-    name: acme
-    state: dump
-    target: /tmp/acme.dir
+- name: download db from the master server
+  ansible.builtin.command: pg_basebackup -P -R -X stream -c fast -h {{ postgresql_master_ip }} -U "{{ postgresql_default_user }}" -D "{{ postgresql_new_path_data_directory }}"
+  when: ansible_host == "{{ postgresql_slave_ip }}"
+
+- name: Start postgresql
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+  become: true
+  when: ansible_host == "{{ postgresql_slave_ip }}"

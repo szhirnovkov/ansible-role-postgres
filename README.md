@@ -7,11 +7,17 @@ postgresql_destination_data: /pgdata
 
 postgresql_new_path_data_directory: /pgdata/postgresql/12/main
 
+postgresql_default_user: postgres
+
 postgresql_db_name: replica
 
-postgresql_db_password: replica
 
-postgresql_db_user: replica
+postgresql_users:
+    - postgresql_db_user: replica
+      postgresql_db_password: replica
+
+    - postgresql_db_user: postgres
+      postgresql_db_password: postgres
 
 postgresql_method: md5
 
@@ -24,3 +30,4 @@ postgresql_packages:
     - python3-psycopg2
     - postgresql
     - postgresql-contrib
+    - postgresql-client-common

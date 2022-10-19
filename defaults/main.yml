@@ -3,9 +3,15 @@ postgresql_config_path: /etc/postgresql/12/main
 postgresql_path_data_direcroty: /var/lib/postgresql
 postgresql_destination_data: /pgdata
 postgresql_new_path_data_directory: /pgdata/postgresql/12/main
+postgresql_default_user: postgres
 postgresql_db_name: replica
-postgresql_db_password: replica
-postgresql_db_user: replica
+postgresql_users:
+    - postgresql_db_user: replica
+      postgresql_db_password: replica
+
+    - postgresql_db_user: postgres
+      postgresql_db_password: postgres
+
 postgresql_method: md5
 postgresql_master_ip: 192.168.56.4
 postgresql_slave_ip: 192.168.56.5
@@ -14,3 +20,4 @@ postgresql_packages:
     - python3-psycopg2
     - postgresql
     - postgresql-contrib
+    - postgresql-client-common
