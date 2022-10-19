@@ -22,14 +22,6 @@
     dest: "{{ postgresql_destination_data }}"
   delegate_to: "{{ inventory_hostname }}"
 
-- name: "Configure PostgreSQL. Set listen_addresses"
-  ansible.builtin.lineinfile:
-    dest: "{{ postgresql_config_path }}/postgresql.conf"
-    regexp: "^#listen_addresses ="
-    line: "listen_addresses = '*'"
-    state: present
-  become: true
-
 - name: "Configure PostgreSQL. Change default data_directory"
   ansible.builtin.lineinfile:
     dest: "{{ postgresql_config_path }}/postgresql.conf"
@@ -38,40 +30,81 @@
     state: present
   become: true
 
-- name: "Allow md5 connection for the db user"
-  postgresql_pg_hba:
-    contype: host
-    create: true
-    databases: all
-    dest: "{{ postgresql_config_path }}/pg_hba.conf"
-    method: trust
-    source: "{{ postgresql_ip }}"
-    users: all
+- name: master Update configuration block in postgresql.conf"
+  ansible.builtin.blockinfile:
+    path: "{{ postgresql_config_path }}/postgresql.conf"
+    block: |
+      listen_addresses = 'localhost, {{ postgresql_master_ip }}'
+      wal_level = hot_standby
+      archive_mode = on
+      archive_command = 'cd .'
+      max_wal_senders = 8
+      hot_standby = on
   become: true
+  when: ansible_host == "{{ postgresql_master_ip }}"
+
+- name: slave Update configuration block in postgresql.conf"
+  ansible.builtin.blockinfile:
+    path: "{{ postgresql_config_path }}/postgresql.conf"
+    block: |
+      listen_addresses = 'localhost, {{ postgresql_slave_ip }}'
+      wal_level = hot_standby
+      archive_mode = on
+      archive_command = 'cd .'
+      max_wal_senders = 8
+      hot_standby = on
+  become: true
+  when: ansible_host == "{{ postgresql_slave_ip }}"
+
+- name: "Allow md5 connection to master server"
+  postgresql_pg_hba:
+     contype: host
+     create: true
+     databases: "{{ postgresql_db_name }}"
+     dest: "{{ postgresql_config_path }}/pg_hba.conf"
+     method: "{{ postgresql_method }}"
+     source: "{{ postgresql_slave_ip }}"
+     users: postgres
+  become: true
+  when: ansible_host == "{{ postgresql_master_ip }}"
+
+- name: "Allow md5 connection to slave server"
+  postgresql_pg_hba:
+     contype: host
+     create: true
+     databases: "{{ postgresql_db_name }}"
+     dest: "{{ postgresql_config_path }}/pg_hba.conf"
+     method: "{{ postgresql_method }}"
+     source: "{{ postgresql_master_ip }}"
+     users: postgres
+  become: true
+  when: ansible_host == "{{ postgresql_slave_ip }}"
 
 - name: Start postgresql
   ansible.builtin.service:
     name: postgresql
     state: started
   become: true
+  when: ansible_host == "{{ postgresql_master_ip }}"
 -
-  become: true
-  become_user: postgres
   name: "Create app database"
   postgresql_db:
     name: "{{ postgresql_db_name }}"
     state: present
--
+  when: ansible_host == "{{ postgresql_master_ip }}"
   become: true
   become_user: postgres
+-
   name: "Create db user"
   postgresql_user:
     name: "{{ postgresql_db_user }}"
     password: "{{ postgresql_db_password }}"
     state: present
--
+  when: ansible_host == "{{ postgresql_master_ip }}"
   become: true
   become_user: postgres
+-
+
   name: "Grant db user access to app db"
   postgresql_privs:
     database: "{{ postgresql_db_name }}"
@@ -79,3 +112,28 @@
     privs: all
     roles: "{{ postgresql_db_user }}"
     type: database
+  when: ansible_host == "{{ postgresql_master_ip }}"
+  become: true
+  become_user: postgres
+
+- name: Recursively remove data directory
+  ansible.builtin.file:
+    path: "{{postgresql_new_path_data_directory }}"
+    state: absent
+  when: ansible_host == "{{ postgresql_slave_ip }}"
+  become: true
+
+- name: Create the empty data directory for replication
+  ansible.builtin.file:
+    path: "{{postgresql_new_path_data_directory }}"
+    state: directory
+    mode: '0700'
+  become: true
+  become_user: postgres
+  when: ansible_host == "{{ postgresql_slave_ip }}"
+
+- name: Dump an existing database using the directory format
+  community.postgresql.postgresql_db:
+    name: acme
+    state: dump
+    target: /tmp/acme.dir
