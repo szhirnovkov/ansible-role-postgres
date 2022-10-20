@@ -4,10 +4,10 @@ postgresql_path_data_direcroty: /var/lib/postgresql
 postgresql_destination_data: /pgdata
 postgresql_new_path_data_directory: /pgdata/postgresql/12/main
 postgresql_default_user: postgres
-postgresql_db_name: replica
+postgresql_db_name: replication
 postgresql_users:
-    - postgresql_db_user: replica
-      postgresql_db_password: replica
+    - postgresql_db_user: replication
+      postgresql_db_password: replication
 
     - postgresql_db_user: postgres
       postgresql_db_password: postgres
